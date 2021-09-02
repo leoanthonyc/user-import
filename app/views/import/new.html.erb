@@ -1,0 +1,6 @@
+<h1>CSV Import</h1>
+<%= form_tag import_path, multipart: true do %>
+  <%= file_field_tag :file, accept: "csv" %>
+  <br/>
+  <%= submit_tag "Import" %>
+<% end %>

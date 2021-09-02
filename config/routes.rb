@@ -1,3 +1,5 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  root to: "import#new"
+
+  resource :import, only: %w(new show create), controller: "import"
 end
