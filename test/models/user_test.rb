@@ -48,4 +48,34 @@ class UserTest < ActiveSupport::TestCase
     user = User.new(name: "Foo", password: "Validpassword123")
     assert user.save!
   end
+
+  test "returns correct no. of changes until password is long enough" do
+    user = User.new(name: "Foo", password: "short")
+    assert user.invalid?
+    assert_equal 5, user.changes_until_valid_password
+  end
+
+  test "returns correct no. of changes until password is short enough" do
+    user = User.new(name: "Foo", password: "thispasswordisverylong")
+    assert user.invalid?
+    assert_equal 6, user.changes_until_valid_password
+  end
+
+  test "returns correct no. of changes until password has one lowercase character" do
+    user = User.new(name: "Foo", password: "PASSWORD123")
+    assert user.invalid?
+    assert_equal 1, user.changes_until_valid_password
+  end
+
+  test "returns correct no. of changes until password has one uppercase character" do
+    user = User.new(name: "Foo", password: "password123")
+    assert user.invalid?
+    assert_equal 1, user.changes_until_valid_password
+  end
+
+  test "returns correct no. of changes until password does not have 3 consecutive repeating characters" do
+    user = User.new(name: "Foo", password: "PPPwwwwww111")
+    assert user.invalid?
+    assert_equal 4, user.changes_until_valid_password
+  end
 end
