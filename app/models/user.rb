@@ -4,31 +4,19 @@ class User < ApplicationRecord
     presence: true, 
     length: { within: 10..16 }
 
-  validate :password_must_contain_lowercase_character,
-    :password_must_contain_uppercase_character,
-    :password_must_contain_digit,
-    :password_cant_have_three_consecutive_repeating_characters,
-    if: -> { password.present? }
+  validate :password_complexity, if: -> { password.present? }
+
+  PASSWORD_COMPLEXITY_RULES = {
+    "must contain at least one lowercase character" => /[a-z]+/,
+    "must contain at least one uppercase character" => /[A-Z]+/,
+    "must contain at least one digit" => /\d+/,
+    "must not contain three consecutive repeating characters" => /^(?:([a-zA-Z0-9])(?!\1\1+))*$/ }
 
   private
 
-  def password_must_contain_lowercase_character
-    return if password.match(/[a-z]+/)
-    errors.add(:password, "must contain at least one lowercase character")
-  end
-
-  def password_must_contain_uppercase_character
-    return if password.match(/[A-Z]+/)
-    errors.add(:password, "must contain at least one uppercase character")
-  end
-
-  def password_must_contain_digit
-    return if password.match(/\d+/)
-    errors.add(:password, "must contain at least one digit")
-  end
-
-  def password_cant_have_three_consecutive_repeating_characters
-    return unless password.match(/([a-zA-Z0-9])\1\1+/)
-    errors.add(:password, "must not contain three consecutive repeating characters")
+  def password_complexity
+    PASSWORD_COMPLEXITY_RULES.each do |message, pattern|
+      errors.add(:password, message) unless password.match(pattern)
+    end
   end
 end
