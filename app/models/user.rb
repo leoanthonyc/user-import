@@ -12,6 +12,10 @@ class User < ApplicationRecord
     "must contain at least one digit" => /\d+/,
     "must not contain three consecutive repeating characters" => /^(?:([a-zA-Z0-9])(?!\1\1+))*$/ }
 
+  def self.import_csv(file)
+    CsvImporter.new(file).call
+  end
+
   def changes_until_valid_password
     validate
     password_errors = errors.select { |error| error.attribute == :password }

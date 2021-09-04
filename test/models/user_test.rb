@@ -78,4 +78,13 @@ class UserTest < ActiveSupport::TestCase
     assert user.invalid?
     assert_equal 4, user.changes_until_valid_password
   end
+
+  test "can import from csv" do
+    path = Rails.root.join('test', 'fixtures', 'files', 'users.csv')
+    csv_file = Rack::Test::UploadedFile.new(path)
+
+    result = User.import_csv(csv_file)
+    assert_match /was successfully saved/, result.first
+    assert_match /Change 1 character/, result.second
+  end
 end
