@@ -16,6 +16,6 @@ class ImportControllerTest < ActionDispatch::IntegrationTest
     csv_file = fixture_file_upload(path, 'text/csv')
 
     post import_url, params: { file: csv_file }
-    assert_response :success
+    assert_redirected_to import_url
   end
 end
