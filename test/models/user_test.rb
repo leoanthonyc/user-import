@@ -79,12 +79,23 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 4, user.changes_until_valid_password
   end
 
+  test "returns 0 no. of change when password is already valid" do
+    user = User.new(name: "Foo", password: "Password123")
+    assert user.valid?
+    assert_equal 0, user.changes_until_valid_password
+  end
+
   test "can import from csv" do
+    assert_equal 2, User.count
+
     path = Rails.root.join('test', 'fixtures', 'files', 'users.csv')
     csv_file = Rack::Test::UploadedFile.new(path)
 
     result = User.import_csv(csv_file)
+
     assert_match /was successfully saved/, result.first
     assert_match /Change 1 character/, result.second
+
+    assert_equal 3, User.count
   end
 end

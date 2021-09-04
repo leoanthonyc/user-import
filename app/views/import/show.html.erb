@@ -1,1 +1,10 @@
 <h1>Users</h1>
+<% if flash[:import_notice] %>
+  <% flash[:import_notice].each do |msg| %>
+    <% if msg.is_a?(Array) %>
+      <p><%= msg.join(", ") %></p>
+    <% else %>
+      <p><%= msg %></p>
+    <% end %>
+  <% end %>
+<% end %>

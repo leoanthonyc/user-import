@@ -8,10 +8,9 @@ class ImportController < ApplicationController
   end
 
   def create
-    file = import_params[:file]
-    CSV.foreach(file.path, headers: true) do |row|
-      User.create(row.to_hash)
-    end
+    result = User.import_csv(import_params[:file])
+    flash[:import_notice] = result
+    redirect_to import_path
   end
 
   private

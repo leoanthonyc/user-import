@@ -17,5 +17,7 @@ class ImportControllerTest < ActionDispatch::IntegrationTest
 
     post import_url, params: { file: csv_file }
     assert_redirected_to import_url
+    assert_match /was successfully saved/, flash[:import_notice].first
+    assert_match /Change 1 character/, flash[:import_notice].second
   end
 end
