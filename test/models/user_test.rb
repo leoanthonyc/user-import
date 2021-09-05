@@ -1,9 +1,6 @@
 require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
   test "cannot save without name" do
     user = User.new(password: "Aqpfk1swods")
     assert_not user.save
@@ -44,7 +41,7 @@ class UserTest < ActiveSupport::TestCase
     assert_not user.save
   end
 
-  test "can save with user and valid password" do
+  test "can save with name and valid password" do
     user = User.new(name: "Foo", password: "Validpassword123")
     assert user.save!
   end
