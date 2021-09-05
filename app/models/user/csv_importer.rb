@@ -15,12 +15,13 @@ class User::CsvImporter
         non_password_related_errors = user.errors.reject { |error| error.attribute == :password }
         if non_password_related_errors.present?
           result << non_password_related_errors.map(&:full_message)
-        else
-          required_changes = user.changes_until_valid_password
+        elsif (required_changes = user.changes_until_valid_password)
           result << "Change #{required_changes} #{'character'.pluralize(required_changes)} of #{user.name} password"
         end
       end
     end
     result
+  rescue CSV::MalformedCSVError
+    raise "Invalid csv file"
   end
 end

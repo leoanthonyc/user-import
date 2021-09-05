@@ -18,7 +18,7 @@ class User < ApplicationRecord
 
   def changes_until_valid_password
     validate
-    password_errors = errors.select { |error| error.attribute == :password }
+    password_errors = errors.where(:password)
     return 0 if password_errors.blank? 
 
     count = 0 

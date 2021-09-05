@@ -1,5 +1,3 @@
-require 'csv'
-
 class ImportController < ApplicationController
   def new
   end
